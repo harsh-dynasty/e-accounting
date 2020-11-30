@@ -3,51 +3,42 @@ const app=express();
 const port = process.env.PORT || 3000;
 app.listen(port);
 
-var users=[];
+
 
 app.use(express.static('public'));
 app.use(express.urlencoded({extended:false}));
 
 app.get('/signout',(req,res)=>{
-    users=[];
+    //change user isLoggedIn state in db
     res.redirect("/");
-})
-app.get('/user',(req,res)=>{
-    
-    res.json({username:users[0].username});
 })
 
 app.get('/login',(req,res)=>{
-    if(users.length==0)
-        res.json({isLoggedIn:false});
-    else
+    var bool=true;
+    if(bool)   //check in db whether user isLoggedIn
         res.json({isLoggedIn:true});
+    else
+        res.json({isLoggedIn:false});
+})
+app.post("/login",(req,res)=>{
+    const user=req.body;
+    console.log(user);
+    //change state isLoggedin for corresponding user in db
+    res.json({status:"success"});
 })
 app.get('/voucher',(req,res)=>{
     
-    if(users.length==0)
-        res.redirect('/');
-    else
+   
         res.sendFile('voucher.html',{root:"./public"});
+    
     
 })
 app.get('/register',(req,res)=>{
-    if(users.length==0)
-        res.sendFile('register.html',{root:"./public"});
-    else
-        res.redirect('/voucher');
+   
+    res.sendFile('register.html',{root:"./public"});
 })
 
-app.post('/login',(req,res)=>{
-    var username=req.body.name;
-    var password=req.body.password;
-    if(username.length>0){          //validate username and password
-        users.push({username,password});
-        res.redirect('/voucher');
-    }
-    else
-        res.redirect('/');
-})
+
 app.post('/register',(req,res)=>{
    
 })

@@ -6,3 +6,4 @@ fetch('/login')
         else
             console.log("Not logged in");
     });
+console.log(window.localStorage);
