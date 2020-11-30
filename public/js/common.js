@@ -81,6 +81,13 @@ document.getElementById("footer").innerHTML=`<div class="container">
 </div>
 </div>`;
 
-fetch('user')
-    .then(res=>res.json())
-    .then(data=>document.getElementById("user-name").textContent+=data.username);
+getUser();
+
+function getUser(){
+    fetch('/user')
+        .then(res=>res.json())
+        .then(data=>{
+           document.getElementById("user-name").textContent+=data.username;
+            console.log(data.username);
+        })
+}
