@@ -8,9 +8,6 @@ var users={};
 app.use(express.static('public'));
 app.use(express.urlencoded({extended:false}));
 
-app.get('/signout',(req,res)=>{
-   
-})
 app.get('/user',(req,res)=>{
     eval(`res.json({username:users["${req.ip}"]})`);
    
@@ -115,6 +112,7 @@ app.get('/contact',(req,res)=>{
 })
 
 app.get('/signout',(req,res)=>{
-    eval(`del users["${req.ip}"]`);
+    console.log(eval(`users["${req.ip}"]`));
+    eval(`delete users["${req.ip}"]`);
     res.redirect("/");
 })
