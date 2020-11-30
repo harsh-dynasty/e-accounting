@@ -33,7 +33,7 @@ app.get('/voucher',(req,res)=>{
 })
 app.get('/register',(req,res)=>{
     if(eval(`users["${req.ip}"]==undefined`))
-        res.sendFile('regster.html',{root:"./public"});
+        res.sendFile('register.html',{root:"./public"});
     else
         res.sendFile('voucher.html',{root:"./public"});
    
