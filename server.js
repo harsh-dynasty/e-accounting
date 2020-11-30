@@ -12,7 +12,7 @@ app.get('/signout',(req,res)=>{
    
 })
 app.get('/user',(req,res)=>{
-    res.json({username:eval(`users["${req.ip}"]`)});
+    eval(`res.json({username:users["${req.ip}"]})`);
    
 })
 
