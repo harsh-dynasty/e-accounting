@@ -5,6 +5,20 @@ app.listen(port);
 
 var users={};
 
+const mongoose = require('mongoose');
+ 
+mongoose.connect('mongodb+srv://dbUser:1234@cluster0.afpe2.mongodb.net/eaccounting?retryWrites=true&w=majority')
+    .then(() => 'You are now connected to Mongo!')
+    .catch(err => console.error('Something went wrong', err));
+
+const userSchema = mongoose.Schema({
+    ip:String,
+    username:String,
+});
+
+var Users=mongoose.model('active_users',userSchema);
+
+
 app.use(express.static('public'));
 app.use(express.urlencoded({extended:false}));
 
@@ -41,8 +55,11 @@ app.post('/login',(req,res)=>{
     var password=req.body.password;
     
     if(username.length>0){  //validate username and password inside this block
-        eval(`users["${req.ip}"]=username`);
-        console.log(users);
+        
+        let user = {ip:req.ip,username:username};
+        Users.collection.insertOne(user)
+        .then(data=>console.log(data))
+        .catch(err=>console.log(err))
         res.redirect("/voucher");
         
     }
