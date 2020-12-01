@@ -65,25 +65,25 @@
       <div class="col-lg-5 py-3">
         <h1 class="wow fadeInUp">SignUp</h1>
 
-        <form method="POST" class="mt-5" action="/login">
+        <form class="mt-5" >
           <div class="form-group wow fadeInUp">
             <label for="name" class="fw-medium fg-grey">Name</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Enter your name here">
+            <input type="text" name="name" class="form-control" id="name" placeholder="Enter your name here" required>
           </div>
           <div class="form-group wow fadeInUp">
             <label for="username" class="fw-medium fg-grey">Username</label>
-            <input type="text" name="username" class="form-control" id="username" placeholder="Choose a username">
+            <input type="text" name="username" class="form-control" id="username" placeholder="Choose a username" required>
           </div>
 
           <div class="form-group wow fadeInUp">
             <label for="password" class="fw-medium fg-grey">Password</label>
-            <input type="password" name="password" class="form-control" id="password" placeholder="Create a password">
+            <input type="password" name="password" class="form-control" id="password" placeholder="Create a password" required>
           </div>
 
-          <p style="color: red;" id="message">Choose a different username</p>
+          <p style="color: red;" id="message"></p>
 
           <div class="form-group mt-4 wow fadeInUp">
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button class="btn btn-primary" id="register-btn">Register</button>
           </div>
         </form>
       </div>
@@ -101,7 +101,7 @@
 <script src="../assets/vendor/wow/wow.min.js"></script>
 
 <script src="../assets/js/mobster.js"></script>
-
+<script src="./js/register.js"></script>
 </body>
 </html>
 

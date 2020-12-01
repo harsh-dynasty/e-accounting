@@ -65,22 +65,22 @@
       <div class="col-lg-5 py-3">
         <h1 class="wow fadeInUp">Login</h1>
         
-        <form method="POST" class="mt-5" action="/login">
+        <form class="mt-5" >
           
           <div class="form-group wow fadeInUp">
             <label for="name" class="fw-medium fg-grey">Username</label>
-            <input type="text" name="name" class="form-control" id="username">
+            <input type="text" name="name" class="form-control" id="username" required>
           </div>
 
           <div class="form-group wow fadeInUp">
             <label for="password" class="fw-medium fg-grey">Password</label>
-            <input type="password" name="password" class="form-control" id="password">
+            <input type="password" name="password" class="form-control" id="password" required>
           </div>
 
-          <p style="color: red;" id="message">User not registered</p>
+          <p style="color: red;" id="message"></p>
 
           <div class="form-group mt-4 wow fadeInUp">
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button class="btn btn-primary" id="login-btn">Login</button>
           </div>
         </form>
       </div>
