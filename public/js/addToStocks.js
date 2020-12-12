@@ -1,6 +1,7 @@
 document.getElementById('submit-btn').addEventListener('click',addtoitems);
 
 function addtoitems(){
+    var username=window.localStorage.username;
     var item_code=document.getElementById('item-code').value;
     var item_name=document.getElementById('item-name').value;
    
@@ -12,6 +13,18 @@ function addtoitems(){
     else
         category=document.getElementById('add-to-existing').value;
     
-    eval(`var code_${item_code}={item_name:"${item_name}",item_code:"${item_code}",category:"${category}",quantity:0,rate:${rate},description:"${description}"}`);
-    console.log(eval(`code_${item_code}`));
+    
+
+    var options={
+        method:'POST',
+        body: JSON.stringify({username,item_code,item_name,description,rate,category}),
+        headers: {
+            'Content-Type': 'application/json'
+    }};
+    
+    fetch("/addStocks",options)
+    .then(res=>res.json())
+    .then(data=>{
+        console.log({item_code,item_name,description,rate,category});
+    })
 }

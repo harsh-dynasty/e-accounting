@@ -10,7 +10,7 @@ function addLedger(){
     var postalCode=document.getElementById('postal-code').value;
     var country=document.getElementById('country').value;
 
-    console.log({type,name,email,contact,address,postalCode,country});
+    
 
     var options={
         method:'POST',
@@ -21,7 +21,10 @@ function addLedger(){
     
     fetch("/addLedger",options)
     .then(res=>res.json())
-    .then(data=>alert("Ledger added successfully !"));
+    .then(data=>{
+        alert("Ledger added successfully !")
+        console.log({type,name,email,contact,address,postalCode,country});
+    });
 
     
 }
