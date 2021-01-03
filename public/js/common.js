@@ -60,7 +60,7 @@ document.getElementById("lower-header").innerHTML=`<div class="container-fluid">
     
     <div class="col-md-9">
         <div class="user">
-            <a href="/signout" class="btn wishlist">
+            <a onClick="signout()" class="btn wishlist">
                 <i class="fa fa-heart"></i>
                 <span>Signout</span>
             </a>
@@ -81,6 +81,27 @@ document.getElementById("footer").innerHTML=`<div class="container">
 </div>
 </div>`;
 
-fetch('user')
-    .then(res=>res.json())
-    .then(data=>document.getElementById("user-name").textContent+=data.username);
+// getUser();
+
+// function getUser(){
+//     fetch('/user')
+//         .then(res=>res.json())
+//         .then(data=>{
+//            document.getElementById("user-name").textContent+=data.username;
+//             console.log(data.username);
+//         })
+// }
+
+const localStorage = window.localStorage;
+function isLoggedIn(){
+    if(localStorage.getItem('username')==undefined)
+        window.open("/","_self");
+    else{
+        document.getElementById('user-name').textContent+=localStorage.getItem('username');
+    }
+}
+isLoggedIn();
+function signout(){
+    localStorage.removeItem('username');
+    window.open('/','_self');
+}

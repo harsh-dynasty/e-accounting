@@ -58,7 +58,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label>Ledger Type</label>
-                                        <select class="custom-select" id="ledger-type">
+                                        <select class="custom-select" id="alter-ledger-type">
                                             
                                             <option selected>Creditors</option>
                                             <option>Debtors</option>
@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label>Ledger name</label>
-                                        <select class="custom-select" id="ledger-type">
+                                        <select class="custom-select" id="alter-ledger-name">
                                             
                                             <option selected>ledger1</option>
                                             <option>ledger2</option>
@@ -99,17 +99,17 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label>Address</label>
-                                                <input class="form-control" type="text" placeholder="New Address line" id="address">
+                                                <input class="form-control" type="text" placeholder="New Address line" id="new-address">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label>Postal Code</label>
-                                                <input class="form-control" type="text" placeholder="New Postal code" id="postal-code">
+                                                <input class="form-control" type="text" placeholder="New Postal code" id="new-postal-code">
                                             </div>
                                             <div class="col-md-6">
                                                 <label>Country</label>
-                                                <select class="custom-select" id="country">
+                                                <select class="custom-select" id="new-country">
                                             
                                                     <option selected>India</option>
                                                     <option>Japan</option>
@@ -127,7 +127,7 @@
                                             
                                                 
                                         <div class="checkout-btn">
-                                            <button id="submit-btn">Add ledger</button>
+                                            <button id="submit-btn">Alter</button>
                                         </div>
                                         
                                     </div>
@@ -169,7 +169,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label>Delete</label><br/>
-                                        <button><i class="fa fa-trash primary"></i></button>
+                                        <button onclick="deleteLedger()"><i class="fa fa-trash primary"></i></button>
                                     </div>
                                     
                                 </div>

@@ -1,103 +1,313 @@
 const express=require('express');
 const app=express();
 const port = process.env.PORT || 3000;
-app.listen(port);
+app.listen(port,()=>console.log(`Server started at port ${port}...`));
 
-var users=[];
 
+///////////////////////
+const mongoose = require('mongoose');
+ 
+mongoose.connect('mongodb+srv://dbUser:1234@cluster0.afpe2.mongodb.net/eaccounting?retryWrites=true&w=majority')
+    .then(() => 'You are now connected to Mongo!')
+    .catch(err => console.error('Something went wrong', err));
+
+const registeruserSchema = mongoose.Schema({
+    name:String,
+    username:String,
+    password:String
+});
+
+var regUsers=mongoose.model('registered_users',registeruserSchema);
+
+const userDataSchema = mongoose.Schema({
+    username: String,
+    ledgers:Array,
+    stocks:Array,
+    vouchers:Array
+});
+
+var usersData=mongoose.model('users_data',userDataSchema);
+///////////////////////
 app.use(express.static('public'));
-app.use(express.urlencoded({extended:false}));
+app.use(express.json());
 
-app.get('/signout',(req,res)=>{
-    users=[];
-    res.redirect("/");
-})
-app.get('/user',(req,res)=>{
-    
-    res.json({username:users[0].username});
-})
-
-app.get('/login',(req,res)=>{
-    if(users.length==0)
-        res.json({isLoggedIn:false});
-    else
-        res.json({isLoggedIn:true});
-})
 app.get('/voucher',(req,res)=>{
-    
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('voucher.html',{root:"./public"});
-    
+   
+    res.sendFile('voucher.html',{root:"./public"});
 })
 app.get('/register',(req,res)=>{
-    if(users.length==0)
-        res.sendFile('register.html',{root:"./public"});
-    else
-        res.redirect('/voucher');
+    res.sendFile('register.html',{root:"./public"});
+   
 })
 
 app.post('/login',(req,res)=>{
-    var username=req.body.name;
+    var username=req.body.username;
     var password=req.body.password;
-    if(username.length>0){          //validate username and password
-        users.push({username,password});
-        res.redirect('/voucher');
-    }
-    else
-        res.redirect('/');
+    console.log({username,password});
+    //check whether username exists or not in regUsers
+    //if exists check for password
+    //if password matched add user to active user and open voucher
+    //if not matched give error mssg
+    //if username not exists give error username not registered
+    regUsers.find({username})
+    .then((docs)=>{
+        if(docs.length==0){
+            res.json({mssg:'Username not registered'});
+           
+        }
+        else{
+            if(docs[0].password==password){
+                res.json({mssg:'Success'});
+            }
+                
+            else
+                res.json({mssg:'Invalid password'});
+        }
+    })
+    .catch((err)=>{
+    console.log(err);
+    })
+
 })
 app.post('/register',(req,res)=>{
-   
+    var name=req.body.name;
+    var username=req.body.username;
+    var password=req.body.password;
+    //check whether username exists or not
+    //if exist err
+    //else save to database
+    regUsers.find({username}) 
+    .then((doc) => {
+       if (doc.length!=0) {
+         res.json({mssg:'User already registered'});
+       } else {
+        let Newuser = new regUsers({name,username,password});
+        regUsers.collection.insertOne(Newuser)
+          .then((data)=>{
+            res.json({mssg:'Successfully registered'});
+          }).catch((err)=>{
+            console.log(err);
+         })
+
+         let doc = new usersData({username});
+         usersData.collection.insertOne(doc);
+       }
+    })
+   .catch((err) => {
+     console.log(err);
+    });
 })
 
 
 app.get('/addToStocks',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('addToStocks.html',{root:"./public"});
+    res.sendFile('addToStocks.html',{root:"./public"});
 })
 app.get('/alterStocks',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('alterStocks.html',{root:"./public"});
+    res.sendFile('alterStocks.html',{root:"./public"});
 })
 app.get('/allStocks',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('allStocks.html',{root:"./public"});
+    res.sendFile('allStocks.html',{root:"./public"});
 })
 app.get('/purchase-sales',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('purchase-sales.html',{root:"./public"});
+    res.sendFile('purchase-sales.html',{root:"./public"});
 })
+// app.get('/open-report/:voucherid',(req,res)=>{
+//     console.log(req.params);
+//     res.sendFile('open-report.html',{root:"./public"});
+// })
 app.get('/addAccount',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('addAccount.html',{root:"./public"});
+    res.sendFile('addAccount.html',{root:"./public"});
 })
 app.get('/alterAccount',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('alterAccount.html',{root:"./public"});
+    res.sendFile('alterAccount.html',{root:"./public"});
+    
 })
 app.get('/allAccounts',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('allAccounts.html',{root:"./public"});
+    res.sendFile('allAccounts.html',{root:"./public"});
+    
 })
 app.get('/contact',(req,res)=>{
-    if(users.length==0)
-        res.redirect('/');
-    else
-        res.sendFile('contact.html',{root:"./public"});
+    res.sendFile('contact.html',{root:"./public"});
+})
+
+app.post('/addLedger',(req,res)=>{
+    var username=req.body.username;
+    var type=req.body.type;
+    var name=req.body.name;
+    var email=req.body.email;
+    var contact=req.body.contact;
+    var address=req.body.address;
+    var postalCode=req.body.postalCode;
+    var country=req.body.country;
+
+    usersData.update({username:username},{
+        $push: {ledgers: {type,name,email,contact,address,postalCode,country}}
+    }).then(docs=>console.log(docs)).catch(err=>console.log(err))
+    res.json({});
+})
+
+app.post("/addStocks",(req,res)=>{
+    var username=req.body.username;
+    var item_code=req.body.item_code;
+    var item_name=req.body.item_name;
+    var description=req.body.description;
+    var category=req.body.category;
+    var rate=req.body.rate;
+    var quantity=0;
+
+    usersData.update({username:username},{
+        $push: {stocks: {item_code,category,item_name,description,rate,quantity}}
+    }).then(docs=>console.log(docs)).catch(err=>console.log(err))
+    res.json({});
+
+})
+
+app.post("/addVouchers",(req,res)=>{
+    var username=req.body.username;
+    var voucher_id=req.body.voucher_id;
+    var voucher_type=req.body.voucher_type;
+    var name=req.body.name;
+    var date=req.body.date;
+    var remarks=req.body.remarks;
+    var payment_method=req.body.payment_method;
+    var billing_total={
+        total_quantity:req.body.total_item_quantity,
+        total_amt:req.body.grand_total
+    }
+    
+    var items=Object.values(req.body.items);
+
+   
+    usersData.update({username:username},{
+        $push: {vouchers: {voucher_id,voucher_type,name,date,remarks,payment_method,billing_total,items}}
+    }).then(docs=>console.log(docs)).catch(err=>console.log(err))
+
+    
+    usersData.find({username})
+        .then(data=>{
+            
+            items.forEach(item=>{
+                var i;
+                for(i=0;i<data[0].stocks.length;i++){
+                    if((data[0].stocks)[i].item_code==item.item_code){
+                        
+                        break;
+                    }
+                }
+                console.log(i+"index");
+                if(voucher_type=='Purchase'){
+        
+                    eval(`usersData.update({username:username},{
+                        $inc: {"stocks.${i}.quantity": Number(item.quantity)}
+                    }).then(docs=>console.log(docs)).catch(err=>console.log(err))`)
+        
+                }else{//voucher_type==sales
+                    eval(`usersData.update({username:username},{
+                        $inc: {"stocks.${i}.quantity": -Number(item.quantity)}
+                    }).then(docs=>console.log(docs)).catch(err=>console.log(err))`)
+                }
+                
+            })
+            
+        }).catch(err=>console.log(err))
+    
+    
+    
+    
+
+    res.json({});
+
+})
+
+app.post('/getLedgers',(req,res)=>{
+    var username=req.body.username;
+    usersData.find({username})
+    .then(data=>res.json({data:data[0].ledgers}))
+    .catch(err=>console.log(err))
+})
+
+app.post('/getItems',(req,res)=>{
+    var username=req.body.username;
+    usersData.find({username})
+    .then(data=>res.json({data:data[0].stocks}))
+    .catch(err=>console.log(err))
+    
+})
+
+app.post('/deleteLedger',(req,res)=>{
+    var username=req.body.username;
+    var ledgername=req.body.ledgerName;
+
+    usersData.update(
+        {username},
+        { $pull: { ledgers: { name: ledgername} } }
+    ).then(data=>res.json({username,ledgername}))
+    .catch(err=>console.log(err));
+    
+    
+    
+})
+
+app.post('/getVouchers',(req,res)=>{
+    var username=req.body.username;
+    usersData.find({username})
+    .then(data=>res.json({data:data[0].vouchers}))
+    .catch(err=>console.log(err))
+})
+
+const {google}=require('googleapis');
+const keys=require('./keys.json');
+
+const client= new google.auth.JWT(
+    keys.client_email,
+    null,
+    keys.private_key,
+    ["https://www.googleapis.com/auth/spreadsheets"]
+);
+
+client.authorize((err,tokens)=>{
+    if(err){
+        console.log(err);
+        return;
+    }else{
+        console.log("Spreadsheet Connected");
+        
+    }
+
+})
+app.post("/gmail",(req,res)=>{
+    var newRow=[req.body.name,req.body.email,req.body.subject,req.body.message];
+    gsrun(client,newRow);
+    res.json({mssg:"Success"});
+})
+
+function gsrun(cl,newRow){
+    const gsapi=google.sheets({version:'v4',auth:cl});
+
+    const options={
+        spreadsheetId:"1fqc7F50cKVO5jYNXcI3qLHWQleZic_gTeEl2q-U3woQ",
+        range:"Sheet1!A1",
+        
+        valueInputOption:'USER_ENTERED',
+        
+        resource:{values:[newRow]}
+    };
+    gsapi.spreadsheets.values.append(options);
+   
+        
+}
+
+
+app.post('/deleteStock',(req,res)=>{
+    var username=req.body.username;
+    var itemName=req.body.itemName;
+    var itemCode=req.body.itemCode;
+    usersData.update(
+        {username},
+        { $pull: { stocks: { item_name: itemName, item_code: itemCode} } }
+    ).then(data=>res.json({}))
+    .catch(err=>console.log(err));
+    
+    
+    
 })

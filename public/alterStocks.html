@@ -56,10 +56,18 @@
                                 <h2>Edit an existing item in stocks </h2>
                                 
                                 <div class="row">
-                                    
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <label>Item category</label>
+                                        <select class="custom-select" id="alter-item-cat">
+                                            <option selected>United States</option>
+                                            <option>Afghanistan</option>
+                                            <option>Albania</option>
+                                            <option>Algeria</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
                                         <label>Item name/code</label>
-                                        <select class="custom-select" id="item-code-name">
+                                        <select class="custom-select" id="alter-item-name">
                                             <option selected>United States</option>
                                             <option>Afghanistan</option>
                                             <option>Albania</option>
@@ -68,7 +76,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label>New name</label>
-                                        <input class="form-control" type="text" placeholder="Enter new name" id="new-item-name">
+                                        <input class="form-control" type="text" placeholder="Enter new name" id="alter-new-name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>New code</label>
+                                        <input class="form-control" type="text" placeholder="Enter new name" id="alter-new-code">
                                     </div>
                                 </div>
                                 
@@ -119,13 +131,13 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label>Rate</label>
-                                                <input class="form-control" type="text" placeholder="Item rate" id="item-rate">
+                                                <input class="form-control" type="text" placeholder="Item rate" id="alter-item-rate">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label>Item Description</label>
-                                                <input class="form-control" type="text" placeholder="Item Description" id="description">
+                                                <input class="form-control" type="text" placeholder="Item Description" id="alter-item-des">
                                             </div>
                                         </div>
                                             
@@ -159,12 +171,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label>Filter by Category</label>
-                                        <select class="custom-select" id="item-code-name">
-                                            <option selected>All</option>
-                                            <option>United States</option>
-                                            <option>Afghanistan</option>
-                                            <option>Albania</option>
-                                            <option>Algeria</option>
+                                        <select class="custom-select" id="delete-item-category">
+                                            
+                                            
                                         </select>
                                     </div>
                                 </div>
@@ -172,7 +181,7 @@
                                     
                                     <div class="col-md-9">
                                         <label>Item name/code</label>
-                                        <select class="custom-select" id="item-code-name">
+                                        <select class="custom-select" id="delete-item-code">
                                             <option selected>United States</option>
                                             <option>Afghanistan</option>
                                             <option>Albania</option>
@@ -181,7 +190,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label>Delete</label><br/>
-                                        <button><i class="fa fa-trash primary"></i></button>
+                                        <button onclick="deleteStock()"><i class="fa fa-trash primary"></i></button>
                                     </div>
                                     
                                 </div>
@@ -219,5 +228,6 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
         <script src="js/common.js"></script>
+        
     </body>
 </html>
