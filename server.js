@@ -227,4 +227,5 @@ app.post('/getItems',(req,res)=>{
     usersData.find({username})
     .then(data=>res.json({data:data[0].stocks}))
     .catch(err=>console.log(err))
+    
 })
