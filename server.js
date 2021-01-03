@@ -229,3 +229,17 @@ app.post('/getItems',(req,res)=>{
     .catch(err=>console.log(err))
     
 })
+
+app.post('/deleteLedger',(req,res)=>{
+    var username=req.body.username;
+    var ledgername=req.body.ledgerName;
+
+    usersData.update(
+        {username},
+        { $pull: { ledgers: { name: ledgername} } }
+    ).then(data=>res.json({username,ledgername}))
+    .catch(err=>console.log(err));
+    
+    
+    
+})
