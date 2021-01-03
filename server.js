@@ -111,6 +111,10 @@ app.get('/allStocks',(req,res)=>{
 app.get('/purchase-sales',(req,res)=>{
     res.sendFile('purchase-sales.html',{root:"./public"});
 })
+// app.get('/open-report/:voucherid',(req,res)=>{
+//     console.log(req.params);
+//     res.sendFile('open-report.html',{root:"./public"});
+// })
 app.get('/addAccount',(req,res)=>{
     res.sendFile('addAccount.html',{root:"./public"});
 })
@@ -242,4 +246,11 @@ app.post('/deleteLedger',(req,res)=>{
     
     
     
+})
+
+app.post('/getVouchers',(req,res)=>{
+    var username=req.body.username;
+    usersData.find({username})
+    .then(data=>res.json({data:data[0].vouchers}))
+    .catch(err=>console.log(err))
 })
