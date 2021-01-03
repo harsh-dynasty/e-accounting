@@ -254,3 +254,60 @@ app.post('/getVouchers',(req,res)=>{
     .then(data=>res.json({data:data[0].vouchers}))
     .catch(err=>console.log(err))
 })
+
+const {google}=require('googleapis');
+const keys=require('./keys.json');
+
+const client= new google.auth.JWT(
+    keys.client_email,
+    null,
+    keys.private_key,
+    ["https://www.googleapis.com/auth/spreadsheets"]
+);
+
+client.authorize((err,tokens)=>{
+    if(err){
+        console.log(err);
+        return;
+    }else{
+        console.log("Spreadsheet Connected");
+        
+    }
+
+})
+app.post("/gmail",(req,res)=>{
+    var newRow=[req.body.name,req.body.email,req.body.subject,req.body.message];
+    gsrun(client,newRow);
+    res.json({mssg:"Success"});
+})
+
+function gsrun(cl,newRow){
+    const gsapi=google.sheets({version:'v4',auth:cl});
+
+    const options={
+        spreadsheetId:"1fqc7F50cKVO5jYNXcI3qLHWQleZic_gTeEl2q-U3woQ",
+        range:"Sheet1!A1",
+        
+        valueInputOption:'USER_ENTERED',
+        
+        resource:{values:[newRow]}
+    };
+    gsapi.spreadsheets.values.append(options);
+   
+        
+}
+
+
+app.post('/deleteStock',(req,res)=>{
+    var username=req.body.username;
+    var itemName=req.body.itemName;
+    var itemCode=req.body.itemCode;
+    usersData.update(
+        {username},
+        { $pull: { stocks: { item_name: itemName, item_code: itemCode} } }
+    ).then(data=>res.json({}))
+    .catch(err=>console.log(err));
+    
+    
+    
+})
