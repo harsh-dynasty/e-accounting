@@ -6,5 +6,5 @@ https://eaccounting.herokuapp.com
 
 ## Sample Login credentials :
 Username : harshsoni12
-Password : Qwerty12
+Password : Qwerty@12
 
