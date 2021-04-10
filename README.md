@@ -2,4 +2,4 @@
 
 ## Link to the project
 
-eaccounting.herokuapp.com
+https://eaccounting.herokuapp.com
